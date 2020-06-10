@@ -1,9 +1,47 @@
+
 body {
   background-color: #79b7c7;
   text-align: center;
-  position: relative:
+  position: relative;
+  margin: auto;
+  vertical-align: center;
+  margin-top: 160px;
+  box-sizing: border-box;
+  width: 615px;
+  height: 310px;
+  padding: 15px;
+  border: 5px solid white;
+  border-radius: 10px;
+}
+h1{
+  font-family: "Oxygen";
+}
+p{
+  font-family: "Raleway";
+  font-size: 120%;
+}
+.intro{
+  color: white;
+  -webkit-animation: fadein 2s; /* Safari, Chrome and Opera > 12.1 */
+  -moz-animation: fadein 2s; /* Firefox < 16 */
+  -ms-animation: fadein 2s; /* Internet Explorer */
+  -o-animation: fadein 2s; /* Opera < 12.1 */
+  animation: fadein 2s;
+}
+@-webkit-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+.intro h1.load{
+  opacity: 1;
 }
 
-.intro {
-  
+.button {
+  background-color: white;
+  color: #79b7c7;
+  border: 13px solid white;
+  font-size: 120%;
+  font-family: "Raleway";
+  font-weight: bold;
+  border-radius: 4px;
 }
