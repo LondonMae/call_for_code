@@ -1,0 +1,47 @@
+body{
+  text-align: center;
+  position: relative;
+  margin-top: 200px;
+}
+h1{
+  font-family: "Oxygen";
+}
+.button1 { /*label buttons*/
+  background-color: white;
+  border: none;
+  display: inline-flex;
+  width: 500px;
+  vertical-align: middle;
+}
+.button2 { /*submit button*/
+  margin: 20px;
+  margin-right: 470px;
+  background-color: #79b7c7;
+  color: white;
+  border: 5px solid #79b7c7;
+  font-size: 100%;
+  font-family: "Raleway";
+  font-weight: bold;
+  border-radius: 4px;
+}
+.mcQ1{
+  color: #79b7c7;
+  border: hidden;
+}
+.mcQ1 label{ /*customizes the text next to radio button*/
+  display: inline-flex;
+  padding: 7px;
+  font-family: "Raleway";
+  font-size: 120%;
+  color: #79b7c7;
+  position: relative;
+}
+.mcQ1 label:hover{ /*puts gray behind text when hovered*/
+  background-color: #F5F5F5;
+}
+.mcQ1 input:hover{
+  background-color: #F5F5F5;
+}
+.mcQ1 input:checked{
+  color:black;
+}

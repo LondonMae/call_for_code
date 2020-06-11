@@ -1,24 +1,38 @@
 <!DOCTYPE html>
   <html lang="en" dir="ltr">
     <head>
-      <link rel="stylesheet" type="text/css" href="style.css">
+      <link href="https://fonts.googleapis.com/css2?family=Oxygen:wght@700&display=swap"="Oxygen" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Raleway&display=swap"="Raleway" rel="stylesheet">
+      <link rel="stylesheet" type="text/css" href="styleQuestions.css">
       <meta charset="utf-8">
       <title>Questions</title>
     </head>
 
     <body>
-      <form>
-        <div class = "mcQ">
-         <h1>Lorem Epsilon</h1>
-          <input type="radio" id = "test1" name = "test" value = "one">
-          <label for="test1"> This is a choice </label><br>
-          <input type="radio" id = "test2" name = "test" value = "two">
-          <label for = "test2"> This is another choice </label><br>
-          <input type="radio" id = "test3" name = "test" value = "three">
-          <label for = "test3"> This is the last choice </label><br>
-          <button class = "button"> Submit </button>
+        <div class = "mcQ1"> <!--First MC question-->
+          <h1>How much do you enjoy your job?</h1>
+            <input type="radio" id = "test1" name = "test" value = "one">
+          <button type="button" class="button1"> <!--Allows user to click on label and radio button fills-->
+            <label for="test1"> I LOVE it </label><br>
+          </button><br>
+            <input type="radio" id = "test2" name = "test" value = "two">
+          <button type="button" class="button1">
+            <label for = "test2"> I like it </label><br>
+          </button><br>
+            <input type="radio" id = "test3" name = "test" value = "three">
+          <button type="button" class="button1">
+            <label for = "test3"> It's ok </label><br>
+          </button><br>
+            <input type="radio" id = "test4" name = "test" value = "four">
+          <button type="button" class="button1">
+            <label for = "test4"> I would rather do something else but it works </label><br>
+          </button><br>
+            <input type="radio" id = "test5" name = "test" value = "five">
+          <button type="button" class="button1">
+            <label for = "test5"> I hate it. </label><br>
+          </button><br>
+            <button class = "button2"> Submit </button>
         </div>
-      </form>
     </body>
 
   </html>
