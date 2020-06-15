@@ -12,30 +12,56 @@ var currentSchedule = [ false, false, false, false, false, false, "wakeup", "bre
 var obligations = [ true, true, false, false, true, true, true, false, false, false, true, false, true, false, false, true ];
 //basically data holder
 class Schedule {
-  constructor(scheduleData, obligations, likesSleep, morningPerson, likesJob, mood, favoriteThings, dislikes, exercise, interaction) {
-    this.wakeup = (scheduleData.indexOf("wakeup") + 1);
-    this.bedtime = (scheduleData.indexOf("sleep") + 1);
+  constructor(scheduleData, likesSleep, morningPerson, likesJob, mood, favoriteThings, dislikes, exercise, interaction, age) {
+    this.wakeup = (scheduleData.indexOf("wakeup") + 1); //turn into daily array
+    this.bedtime = (scheduleData.indexOf("sleep") + 1); //turn into daily array
     this.scheduleData = scheduleData;
-    this.obligations = obligations;
+    this.obligations = this.obligations();
     this.sleepApproval = likesSleep;
     this.morningPerson = morningPerson;
+    this.age = age;
     this.likesJob = likesJob;
     this.mood = mood;
     this.favoriteThings = favoriteThings;
     this.dislikes = dislikes;
-    this.exercise = exercise;
-    this.interaction = interaction;
-    this.freeTime = 0;
+    this.exercise = this.exercise(); //turn into total
+    this.interaction = interaction; //turn into daily array;
+    this.freeTime = this.amountOfFreeTime(); //turn into daily array
     this.sleep = (24 - this.bedtime) + this.wakeup;
   }
 
+  idealSleep() {
+
+  }
+
+  obligations() {
+
+  }
+
+  exercise() {
+
+  }
+
   amountOfFreeTime() {
+    var freeTime = 0;
     for (var i = 0; i < obligations.length; i++) {
       if(!obligations[i]) { freeTime += 1; }
     }
+    return freeTime;
+
+  }
+
+  sleepDeviation() {
+
+  }
+
+  interaction() {
+
   }
 
   calcIdealness() {
+
+    //for loop for each day
     var timeDiff = Math.abs(idealFreeTime-this.freeTime);
     mind -= (timeDiff*10);
     body -= (timeDiff*5);
@@ -45,14 +71,15 @@ class Schedule {
     mind -= (sleepDiff*7);
     body -= (sleepDiff*7);
 
-    totalExercise += this.exercise;
+    var exerciseDiff = idealExercise - this.exercise;
+    if (exerciseDiff > 0) {body -= (exerciseDiff*15);}
 
     if (!this.likesJob) {
       mind -= 10;
       soul -= 30;
     }
 
-      soul -= this.mood/5;
+    soul -= this.mood/5;
 
 
   }
