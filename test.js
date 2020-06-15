@@ -2,7 +2,6 @@ var mind = 100;
 var body = 100;
 var soul = 100;
 var idealFreeTime = 2.5;
-var idealSleep = 8;
 var idealExercise = 5;
 var totalExercise = 0;
 
@@ -28,13 +27,28 @@ class Schedule {
     this.interaction = interaction; //turn into daily array;
     this.freeTime = this.amountOfFreeTime(); //turn into daily array
     this.sleep = (24 - this.bedtime) + this.wakeup;
+    this.idealSleep = this.idealSleep;
   }
 
   idealSleep() {
-
+    var idealSleep;
+    if (this.age <= 12 && this.age > 6) {idealSleep = [9,12]; }
+    else if (this.age > 12 && this.age <= 18) { return idealSleep = [8,10]; }
+    else if (this.age > 18 && this.age <= 60) {return idealSleep = [7,24]; }
+    else if (this.age > 60 && this.age <= 64) {return idealSleep = [7,9]; }
+    else if (this.age > 64 && this.age <= 120) { return idealSleep = [7,8]; }
+    else { return "invalid age, please try again"; }
   }
 
   obligations() {
+
+    var size = this.scheduleData.length;
+    this.scheduleData.forEach((item, i) => {
+      if (!item) { size--; }
+    });
+
+    var obligations = new array(size);
+    //coem back to this when schedule system is set up
 
   }
 
@@ -48,7 +62,11 @@ class Schedule {
       if(!obligations[i]) { freeTime += 1; }
     }
     return freeTime;
+  }
 
+  idealFreeTime() {
+    //if work 2.5, if not then  5
+    if (work)
   }
 
   sleepDeviation() {
@@ -61,15 +79,25 @@ class Schedule {
 
   calcIdealness() {
 
+    if (this.sleep < this.idealSleep[0] && this.sleep > this.idealSleep[1]) {
+      var low = Math.abs(this.sleep - this.idealSleep[0]);
+      var high = Math.abs(this.sleep - this.idealSleep[1]);
+      if (low >= high) {
+        mind -= low*11;
+        body -= low *7;
+      }
+      else {
+        mind -= high*11;
+        body -= high*7;
+       }
+    }
+
     //for loop for each day
     var timeDiff = Math.abs(idealFreeTime-this.freeTime);
     mind -= (timeDiff*10);
     body -= (timeDiff*5);
     soul -= (timeDiff*5);
 
-    var sleepDiff = Math.abs(this.sleep - idealSleep);
-    mind -= (sleepDiff*7);
-    body -= (sleepDiff*7);
 
     var exerciseDiff = idealExercise - this.exercise;
     if (exerciseDiff > 0) {body -= (exerciseDiff*15);}
