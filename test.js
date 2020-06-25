@@ -12,32 +12,36 @@ var currentSchedule = [[ false, false, false, false, false, false, "wakeup", "br
 "read", "videogames", "videogames", "sleep" ], [ false, false, false, false, false, false, "wakeup", "breakfast", "exercise", "exercise", "code", "lunch", "dogs", "movies", "movies", "movies", "dinner", "tv",
 "read", "videogames", "videogames", "sleep" ]];
 
+var things = { "mind": [hi],
+              "body": [hi],
+              "soul": [hi] }
+
 var obligations = [ true, true, false, false, true, true, true, false, false, false, true, false, true, false, false, true ];
-//basically data holder
+
 class Schedule {
-  constructor(scheduleData, likesJob, mood, favoriteThings, dislikes, exercise, interaction, age, work) {
+  constructor(scheduleData, age, likesJob, mood, favoriteThings, dislikes, interaction, work) {
     this.scheduleData = scheduleData;
     this.wakeup = this.wakeup();
     this.bedtime = this.bedtime();
-    this.age = 18;
-    this.likesJob = true;
-    this.mood = 30;
+    this.age = age;
+    this.likesJob = likesJob;
+    this.mood = mood;
     this.favoriteThings = favoriteThings;
     this.dislikes = dislikes;
-    this.exercise = this.exercise(); //turn into total
-    this.idealExercise = this.idealExercise(); //calc ideal for age per week
-    this.interaction = false; //turn into daily array;
-    this.freeTime = this.amountOfFreeTime(); //turn into daily array
+    this.exercise = this.exercise();
+    this.idealExercise = this.idealExercise();
+    this.interaction = interaction;
+    this.freeTime = this.amountOfFreeTime();
     this.sleep = this.sleep();
     this.idealSleep = this.idealSleep();
     this.idealFreeTime = this.idealFreeTime();
     this.sleepDeviation = this.sleepDeviation();
-    this.work = true;
+    this.work = work;
   }
 
   wakeup() {
     var wakeupTime = new Array();
-    this.scheduleData.forEach((schedule, i) => {
+    this.scheduleData.forEach((schedule) => {
       wakeupTime.push((schedule.indexOf("wakeup") + 1));
     });
     return wakeupTime;
@@ -45,7 +49,7 @@ class Schedule {
 
   bedtime() {
     var bedTime = new Array();
-    this.scheduleData.forEach((schedule, i) => {
+    this.scheduleData.forEach((schedule) => {
       bedTime.push((schedule.indexOf("sleep") + 1));
     });
     return bedTime;
@@ -71,38 +75,36 @@ class Schedule {
 
   exercise() {
     var totalExercise = 0;
-    this.scheduleData.forEach((schedule, i) => {
-      schedule.forEach((hour, j) => {
-        if (hour == "exercise") { totalExercise += 1;}
+    this.scheduleData.forEach((schedule) => {
+      schedule.forEach((hour) => {
+        if (hour == "exercise") { totalExercise ++;}
       });
     });
     return totalExercise;
   }
 
   idealExercise() {
-
+    //must look up ideal exercise for ages
   }
 
-
-//change to work with new system
+  //incomplete
   amountOfFreeTime() {
-
     var time = new Array();
+
     for (var j = 0; j < 7; j++) {
       var size = this.scheduleData.length;
       this.scheduleData.forEach((item, i) => {
         if (!item) { size--; }
       });
+    var obligations = new Array(size);
+    //fill obligations array
 
-      var obligations = new Array(size);
-
-      var freeTime = 0;
-      for (var i = 0; i < obligations.length; i++) {
-        if(!obligations[i]) { freeTime += 1; }
-      }
+    var freeTime = 0;
+    for (var i = 0; i < obligations.length; i++) {
+      if(!obligations[i]) { freeTime += 1; }
+    }
       time.push(freeTime);
     }
-    console.log(time);
     return time;
   }
 
@@ -112,7 +114,6 @@ class Schedule {
       if (this.work) { free.push(2.5); }
       if (!this.work) { free.push(5); }
     }
-    console.log(free);
     return free;
   }
 
@@ -126,16 +127,14 @@ class Schedule {
     var sd = 0;
     this.bedtime.forEach((day, i) => {
       sd += Math.pow((this.bedtime[i] - mean), 2);
-
     });
-    sd /= 7;
-    sd = Math.sqrt(sd);
-    return sd;
 
+    sd = Math.sqrt(sd)/7;
+    return sd;
   }
 
   interaction() {
-
+    //make array
   }
 
   calcIdealness() {
@@ -144,6 +143,7 @@ class Schedule {
       if (this.sleep[i] < this.idealSleep[0] || this.sleep[i] > this.idealSleep[1]) {
         var low = Math.abs(this.sleep[i] - this.idealSleep[0]);
         var high = Math.abs(this.sleep[i] - this.idealSleep[1]);
+
         if (low >= high) {
           mind -= low*11/7;
           body -= low;
@@ -151,12 +151,10 @@ class Schedule {
         else {
           mind -= high*11/7;
           body -= high;
-         }
-      }
-    }
+        }
+    }}
 
 
-    //for loop for each day
     var timeDiff;
     for (var i = 0; i < 7; i++) {
       timeDiff = Math.abs(this.idealFreeTime[i]-this.freeTime[i]);
@@ -165,28 +163,30 @@ class Schedule {
       soul -= (timeDiff*5/7);
     }
 
+
     var exerciseDiff = idealExercise - this.exercise;
     if (exerciseDiff > 0) {body -= (exerciseDiff*15);}
+
 
     if (!this.likesJob) {
       mind -= 10;
       soul -= 30;
     }
 
+
     soul -= this.mood/5;
 
+
     if (!this.interaction) { soul -= 30; }
+
 
     this.mind -= this.sleepDeviation*6;
     this.body -= this.sleepDeviation*4;
 
   }
 
-  //
-
-
   get idealness(){
-
+    //get actuall values
   }
 
   //keep all obligations
@@ -221,6 +221,3 @@ class Schedule {
 var mySchedule = new Schedule(currentSchedule, obligations, false, true, true, 30, "horses", "drinking", 1, true);
 mySchedule.calcIdealness();
 console.log(mind + " " + body + " " + soul);
-//compute maximum mind body soul based on obligations
-
-//data for questions
