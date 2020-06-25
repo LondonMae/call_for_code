@@ -9,12 +9,12 @@ var currentSchedule = [[ false, false, false, false, false, false, "wakeup", "br
 "read", "videogames", "videogames", "sleep" ], [ false, false, false, false, false, false, "wakeup", "breakfast", "exercise", "exercise", "code", "lunch", "dogs", "movies", "movies", "movies", "dinner", "tv",
 "read", "videogames", "videogames", "sleep" ], [ false, false, false, false, false, false, "wakeup", "breakfast", "exercise", "exercise", "code", "lunch", "dogs", "movies", "movies", "movies", "dinner", "tv",
 "read", "videogames", "videogames", "sleep" ], [ false, false, false, false, false, false, "wakeup", "breakfast", "exercise", "exercise", "code", "lunch", "dogs", "movies", "movies", "movies", "dinner", "tv",
-"read", "videogames", "videogames", "sleep" ], [ false, false, false, false, false, false, "wakeup", "breakfast", "exercise", "exercise", "code", "lunch", "dogs", "movies", "movies", "movies", "dinner", "tv",
+"read", "videogames", "interaction", "sleep" ], [ false, false, false, false, false, false, "wakeup", "breakfast", "exercise", "exercise", "code", "lunch", "dogs", "movies", "movies", "movies", "dinner", "tv",
 "read", "videogames", "videogames", "sleep" ]];
 
-var things = { "mind": [hi],
-              "body": [hi],
-              "soul": [hi] }
+var activities = { "mind": ["reading", "video games", "television"],
+              "body": ["yoga", "gym", "run"],
+              "soul": ["food with friends", "baking", "meditation"] };
 
 var obligations = [ true, true, false, false, true, true, true, false, false, false, true, false, true, false, false, true ];
 
@@ -30,7 +30,7 @@ class Schedule {
     this.dislikes = dislikes;
     this.exercise = this.exercise();
     this.idealExercise = this.idealExercise();
-    this.interaction = interaction;
+    this.interaction = this.interaction();
     this.freeTime = this.amountOfFreeTime();
     this.sleep = this.sleep();
     this.idealSleep = this.idealSleep();
@@ -77,14 +77,15 @@ class Schedule {
     var totalExercise = 0;
     this.scheduleData.forEach((schedule) => {
       schedule.forEach((hour) => {
-        if (hour == "exercise") { totalExercise ++;}
+        if (hour == "exercise") { totalExercise+=60;}
       });
     });
     return totalExercise;
   }
 
   idealExercise() {
-    //must look up ideal exercise for ages
+    if (this.age < 65) { return 300; }
+    else { return false; }
   }
 
   //incomplete
@@ -117,6 +118,10 @@ class Schedule {
     return free;
   }
 
+  work() {
+
+  }
+
   sleepDeviation() {
     var mean = 0;
     this.bedtime.forEach((day, i) => {
@@ -134,7 +139,14 @@ class Schedule {
   }
 
   interaction() {
-    //make array
+
+    this.scheduleData.forEach((day, i) => {
+      day.forEach((hour, i) => {
+        if (hour == "interaction") {
+          return true;}
+      });
+    });
+    return false;
   }
 
   calcIdealness() {
@@ -158,14 +170,18 @@ class Schedule {
     var timeDiff;
     for (var i = 0; i < 7; i++) {
       timeDiff = Math.abs(this.idealFreeTime[i]-this.freeTime[i]);
-      mind -= (timeDiff*10/7);
-      body -= (timeDiff*5/7);
-      soul -= (timeDiff*5/7);
+      mind -= (timeDiff*6/7);
+      body -= (timeDiff*3/7);
+      soul -= (timeDiff*3/7);
     }
 
 
-    var exerciseDiff = idealExercise - this.exercise;
-    if (exerciseDiff > 0) {body -= (exerciseDiff*15);}
+    if (this.idealExercise != false) {
+      var exerciseDiff = this.idealExercise - this.exercise;
+      if (exerciseDiff > 0) {
+        if (exerciseDiff < 150) {body -= (exerciseDiff/20);}
+        else {body -= (exerciseDiff/10);}
+    }}
 
 
     if (!this.likesJob) {
@@ -177,7 +193,7 @@ class Schedule {
     soul -= this.mood/5;
 
 
-    if (!this.interaction) { soul -= 30; }
+    if (!this.interaction) { soul -= 30; } //tbd if efficient... maybe just ask user
 
 
     this.mind -= this.sleepDeviation*6;
@@ -218,6 +234,6 @@ class Schedule {
 }
 
 //current user schedule
-var mySchedule = new Schedule(currentSchedule, obligations, false, true, true, 30, "horses", "drinking", 1, true);
+var mySchedule = new Schedule(currentSchedule, 18, true, 0, "Hi", "bye", false);
 mySchedule.calcIdealness();
 console.log(mind + " " + body + " " + soul);
