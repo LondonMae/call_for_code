@@ -8,3 +8,7 @@ function showMask() {
   document.getElementById('q1').style.display='none'; //I was using visibilty here but it was messing with css for some reason
   document.getElementById('q2').style.display='block';
 }
+function showMask1() {
+  document.getElementById('q2').style.display = 'none';
+  document.getElementById('cal').style.display='block';
+}

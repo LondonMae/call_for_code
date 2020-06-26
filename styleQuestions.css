@@ -73,8 +73,22 @@ input[type=radio]{
   margin-right: 51px;
   cursor: pointer;
 }
-
+.submitDD { /*submit button*/
+  background-color: #79b7c7;
+  color: white;
+  border: 5px solid #79b7c7;
+  font-size: 100%;
+  font-family: "Raleway";
+  font-weight: bold;
+  border-radius: 4px;
+  margin-top:50px;
+  margin-left: -285px;
+  position: absolute;
+}
 /*table css*/
+.cal{
+  display: none;
+}
 table{
   border-collapse: collapse;
   width: 100%;
