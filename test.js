@@ -1,7 +1,6 @@
 var mind = 100;
 var body = 100;
 var soul = 100;
-var idealExercise = 5;
 
 var currentSchedule = [[ false, false, false, false, false, false, "wakeup", "breakfast", "exercise", "exercise", "code", "lunch", "dogs", "movies", "movies", "movies", "dinner", "tv",
 "read", "videogames", "videogames", "sleep" ], [ false, false, false, false, false, false, "wakeup", "breakfast", "exercise", "exercise", "code", "lunch", "dogs", "movies", "movies", "movies", "dinner", "tv",
@@ -149,8 +148,8 @@ class Schedule {
     return false;
   }
 
-  calcIdealness() {
 
+  sleeping() {
     for (var i = 0; i < this.sleep.length; i++) {
       if (this.sleep[i] < this.idealSleep[0] || this.sleep[i] > this.idealSleep[1]) {
         var low = Math.abs(this.sleep[i] - this.idealSleep[0]);
@@ -164,7 +163,7 @@ class Schedule {
           mind -= high*11/7;
           body -= high;
         }
-    }}
+    }}}
 
 
     var timeDiff;
@@ -201,13 +200,10 @@ class Schedule {
 
   }
 
-  get idealness(){
-    //get actuall values
-  }
-
-  //keep all obligations
-  //eventually take into account future obligations
-  //add chosen mind related activities
+  //for lowest score implement morse of those activities
+//fix problems first
+//put in obligations
+//add chosen mind related activities
   addMind() {
 
   }
@@ -236,4 +232,5 @@ class Schedule {
 //current user schedule
 var mySchedule = new Schedule(currentSchedule, 18, true, 0, "Hi", "bye", false);
 mySchedule.calcIdealness();
+console.log(mySchedule.order());
 console.log(mind + " " + body + " " + soul);
