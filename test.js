@@ -149,7 +149,7 @@ class Schedule {
   }
 
 
-  sleeping() {
+  calcIdealness() {
     for (var i = 0; i < this.sleep.length; i++) {
       if (this.sleep[i] < this.idealSleep[0] || this.sleep[i] > this.idealSleep[1]) {
         var low = Math.abs(this.sleep[i] - this.idealSleep[0]);
@@ -163,7 +163,7 @@ class Schedule {
           mind -= high*11/7;
           body -= high;
         }
-    }}}
+    }}
 
 
     var timeDiff;
@@ -197,6 +197,17 @@ class Schedule {
 
     this.mind -= this.sleepDeviation*6;
     this.body -= this.sleepDeviation*4;
+
+  }
+
+  //make bedtime the mean bedTime
+  //make sleep time the time that is closest in range
+  //subtract some free time or add (randoized)
+  //add exercise
+  //add at least one hour interaction
+
+  //calc idealness after change, then add mind body soul, then calc again
+  change() {
 
   }
 
