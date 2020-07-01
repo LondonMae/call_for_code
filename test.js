@@ -1,25 +1,25 @@
 var mind = 100;
 var body = 100;
 var soul = 100;
-var idealExercise = 5;
 
-var currentSchedule = [[ false, false, false, false, false, false, "wakeup", "breakfast", "exercise", "exercise", "code", "lunch", "dogs", "movies", "movies", "movies", "dinner", "tv",
-"read", "videogames", "videogames", "sleep" ], [ false, false, false, false, false, false, "wakeup", "breakfast", "exercise", "exercise", "code", "lunch", "dogs", "movies", "movies", "movies", "dinner", "tv",
-"read", "videogames", "videogames", "sleep" ], [ false, false, false, false, false, false, "wakeup", "breakfast", "exercise", "exercise", "code", "lunch", "dogs", "movies", "movies", "movies", "dinner", "tv",
-"read", "videogames", "videogames", "sleep" ], [ false, false, false, false, false, false, "wakeup", "breakfast", "exercise", "exercise", "code", "lunch", "dogs", "movies", "movies", "movies", "dinner", "tv",
-"read", "videogames", "videogames", "sleep" ], [ false, false, false, false, false, false, "wakeup", "breakfast", "exercise", "exercise", "code", "lunch", "dogs", "movies", "movies", "movies", "dinner", "tv",
-"read", "videogames", "videogames", "sleep" ], [ false, false, false, false, false, false, "wakeup", "breakfast", "exercise", "exercise", "code", "lunch", "dogs", "movies", "movies", "movies", "dinner", "tv",
-"read", "videogames", "interaction", "sleep" ], [ false, false, false, false, false, false, "wakeup", "breakfast", "exercise", "exercise", "code", "lunch", "dogs", "movies", "movies", "movies", "dinner", "tv",
-"read", "videogames", "videogames", "sleep" ]];
+var currentSchedule = [[ false, false, false, false, false, false, "wakeup", "food", "exercise", "exercise", "work", "food", "active liesure", "chill", "chill", "chill", "food", "chill",
+"active liesure", "chill", "chill", "sleep" ], [ false, false, false, false, false, false, "wakeup", "food", "exercise", "exercise", "work", "food", "active liesure", "chill", "chill", "chill", "food", "chill",
+"active liesure", "chill", "chill", "sleep" ], [ false, false, false, false, false, false, "wakeup", "food", "exercise", "exercise", "work", "food", "active liesure", "chill", "chill", "chill", "food", "chill",
+"active liesure", "chill", "chill", "sleep" ], [ false, false, false, false, false, false, "wakeup", "food", "exercise", "exercise", "work", "food", "active liesure", "chill", "chill", "chill", "food", "chill",
+"active liesure", "chill", "chill", "sleep" ], [ false, false, false, false, false, false, "wakeup", "food", "exercise", "exercise", "work", "food", "active liesure", "chill", "chill", "chill", "food", "chill",
+"active liesure", "chill", "chill", "sleep" ], [ false, false, false, false, false, false, "wakeup", "food", "exercise", "exercise", "work", "food", "active liesure", "chill", "chill", "chill", "food", "chill",
+"active liesure", "chill", "chill", "sleep" ], [ false, false, false, false, false, false, "wakeup", "food", "exercise", "exercise", "work", "food", "active liesure", "chill", "chill", "chill", "food", "chill",
+"active liesure", "chill", "chill", "sleep" ]];
+
+var obligations = {6:"first thing", 7:"breakfast", 8:"run", 10:"code", 11:"lunch", 4:"dinner", 9:"sleep"}
+var toDo = ["walk dogs", "reading"]
 
 var activities = { "mind": ["reading", "video games", "television"],
               "body": ["yoga", "gym", "run"],
               "soul": ["food with friends", "baking", "meditation"] };
 
-var obligations = [ true, true, false, false, true, true, true, false, false, false, true, false, true, false, false, true ];
-
 class Schedule {
-  constructor(scheduleData, age, likesJob, mood, favoriteThings, dislikes, interaction, work) {
+  constructor(scheduleData, age, likesJob, mood, favoriteThings, dislikes, work) {
     this.scheduleData = scheduleData;
     this.wakeup = this.wakeup();
     this.bedtime = this.bedtime();
@@ -90,23 +90,14 @@ class Schedule {
 
   //incomplete
   amountOfFreeTime() {
-    var time = new Array();
-
     for (var j = 0; j < 7; j++) {
       var size = this.scheduleData.length;
       this.scheduleData.forEach((item, i) => {
         if (!item) { size--; }
       });
-    var obligations = new Array(size);
-    //fill obligations array
 
-    var freeTime = 0;
-    for (var i = 0; i < obligations.length; i++) {
-      if(!obligations[i]) { freeTime += 1; }
-    }
-      time.push(freeTime);
-    }
-    return time;
+    return size - (obligations.length + toDo.length);
+
   }
 
   idealFreeTime() {
@@ -149,8 +140,8 @@ class Schedule {
     return false;
   }
 
-  calcIdealness() {
 
+  calcIdealness() {
     for (var i = 0; i < this.sleep.length; i++) {
       if (this.sleep[i] < this.idealSleep[0] || this.sleep[i] > this.idealSleep[1]) {
         var low = Math.abs(this.sleep[i] - this.idealSleep[0]);
@@ -201,13 +192,45 @@ class Schedule {
 
   }
 
-  get idealness(){
-    //get actuall values
+  //make bedtime the mean bedTime
+  //make sleep time the time that is closest in range
+  //subtract some free time or add (randoized)
+  //add exercise
+  //add at least one hour interaction
+
+  //calc idealness after change, then add mind body soul, then calc again
+  change() {
+    var mean = 0;
+    this.bedtime.forEach((i) => {
+      mean += this.bedtime[i];
+    });
+    mean /= 7;
+    this.bedtime.forEach((i) => {
+      this.bedtime[i] = mean;
+    });
+
+    mean = 0;
+    this.sleep.forEach((i) => {
+      mean += this.sleep[i];
+    });
+    mean /= 7;
+    if (mean > this.idealSleep[0] && mean < this.idealSleep[1]) { this.sleep = (idealSleep[0] + idealSleep[1]) / 2; }
+    else if (mean < this.idealSleep[0]) { this.sleep = idealSleep[0]; }
+    else if (mean > this.idealSleep[1]) { this.sleep = idealSleep[1]; }
+
+      this.wakeup.forEach((i) => {
+        this.wakeup[i] = this.bedtime[i] - (24 - this.sleep);
+      });
+
+
+
+
   }
 
-  //keep all obligations
-  //eventually take into account future obligations
-  //add chosen mind related activities
+  //for lowest score implement morse of those activities
+//fix problems first
+//put in obligations
+//add chosen mind related activities
   addMind() {
 
   }
