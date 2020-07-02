@@ -27,6 +27,7 @@ div{
   -o-animation: fadein 2s;
   animation: fadein 2s;
 }
+
 .button1 { /*label buttons*/
   background-color: white;
   border: none;
@@ -85,9 +86,13 @@ input[type=radio]{
   margin-left: -285px;
   position: absolute;
 }
+
 /*table css*/
 .cal{
   display: none;
+}
+#head{
+  margin-top: -170px;
 }
 table{
   border-collapse: collapse;
@@ -101,12 +106,10 @@ td, th {
 th{
   width: 14.285714287%;
 }
-td {
-  height: 200px
-}
 input{
   border: 1px solid #dddddd;
   position: absolute;
+  margin: 0px;
 }
 span{
   position: relative;
@@ -120,16 +123,24 @@ ul{
   font-size: 55%;
   position: relative;
   cursor: pointer;
-  position: relative;
-  margin-left: 21px;
+  margin-left: 15px;
   padding-top: 5px;
   border: .5px solid #dddddd;
   font-family: "Raleway";
-  margin-bottom: 0px;
+  margin-bottom: -50px;
+  margin-top: -50px;
 }
 .text:hover + .option{
   visibility: hidden;
 }
-.text:hover {
+.text:focus {
   width: 100px;
+  padding: 0px;
+  margin-left: 20px;
+}
+#text{
+  visibility: visible;
+}
+.option{
+  display: none;
 }
