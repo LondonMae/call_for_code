@@ -11,16 +11,19 @@ var currentSchedule = [[ false, false, false, false, false, false, "wakeup", "fo
 "active liesure", "chill", "chill", "sleep" ], [ false, false, false, false, false, false, "wakeup", "food", "exercise", "exercise", "work", "food", "active liesure", "chill", "chill", "chill", "food", "chill",
 "active liesure", "chill", "chill", "sleep" ]];
 
-var obligations = {6:"first thing", 7:"breakfast", 8:"run", 10:"code", 11:"lunch", 4:"dinner", 9:"sleep"}
-var toDo = ["walk dogs", "reading"]
+var obligations = [{6:"first thing", 7:"breakfast", 8:"run", 10:"code", 11:"lunch", 4:"dinner", 9:"sleep"}, {6:"first thing", 7:"breakfast", 8:"run", 10:"code", 11:"lunch", 4:"dinner", 9:"sleep"}, {6:"first thing", 7:"breakfast", 8:"run", 10:"code", 11:"lunch", 4:"dinner", 9:"sleep"}, {6:"first thing", 7:"breakfast", 8:"run", 10:"code", 11:"lunch", 4:"dinner", 9:"sleep"}, {6:"first thing", 7:"breakfast", 8:"run", 10:"code", 11:"lunch", 4:"dinner", 9:"sleep"}, {6:"first thing", 7:"breakfast", 8:"run", 10:"code", 11:"lunch", 4:"dinner", 9:"sleep"}, {6:"first thing", 7:"breakfast", 8:"run", 10:"code", 11:"lunch", 4:"dinner", 9:"sleep"}];
+
+var toDo = [["walk dogs", "reading"], ["walk dogs", "reading"], ["walk dogs", "reading"], ["walk dogs", "reading"], ["walk dogs", "reading"], ["walk dogs", "reading"], ["walk dogs", "reading"]];
 
 var activities = { "mind": ["reading", "video games", "television"],
               "body": ["yoga", "gym", "run"],
               "soul": ["food with friends", "baking", "meditation"] };
 
 class Schedule {
-  constructor(scheduleData, age, likesJob, mood, favoriteThings, dislikes, work) {
+  constructor(scheduleData, toDo, obligations, age, likesJob, mood, favoriteThings, dislikes) {
     this.scheduleData = scheduleData;
+    this.toDo = toDo;
+    this.obligations = obligations;
     this.wakeup = this.wakeup();
     this.bedtime = this.bedtime();
     this.age = age;
@@ -34,9 +37,9 @@ class Schedule {
     this.freeTime = this.amountOfFreeTime();
     this.sleep = this.sleep();
     this.idealSleep = this.idealSleep();
+    this.work = this.work();
     this.idealFreeTime = this.idealFreeTime();
     this.sleepDeviation = this.sleepDeviation();
-    this.work = work;
   }
 
   wakeup() {
@@ -90,38 +93,65 @@ class Schedule {
 
   //incomplete
   amountOfFreeTime() {
-    for (var j = 0; j < 7; j++) {
-      var size = this.scheduleData.length;
-      this.scheduleData.forEach((item, i) => {
-        if (!item) { size--; }
+    var time = new Array();
+    for (var i = 0; i < 7; i++) {
+      var size = this.scheduleData[i].length;
+      this.scheduleData[i].forEach((hour) => {
+        if (hour == false) { size--; }
       });
-    
-    return size - (obligations.length + toDo.length);
-
+      time.push(size - (Object.keys(this.obligations[i]).length + this.toDo[i].length));
+    }
+    return time;
   }
 
   idealFreeTime() {
     var free = new Array();
     for (var i = 0; i < 7; i++) {
-      if (this.work) { free.push(2.5); }
-      if (!this.work) { free.push(5); }
+      if (this.work[i]) { free.push(2.5); }
+      if (!this.work[i]) { free.push(5); }
     }
     return free;
   }
 
   work() {
+    var works = [false, false, false, false, false, false, false];
+    for (var i = 0; i < 7; i++) {
+      this.scheduleData[i].forEach((hour) => {
+        if (hour == "work") { works[i] = true;}
+      });
+    }
+    return works;
+  }
 
+  averageFreeTime() {
+    var avgByDay = {"workdays": 0, "days": 0};
+    for (var i = 0; i < 7; i++) {
+      if (this.work[i]) {avgByDay["workdays"] += this.freeTime[i];}
+      if (!this.work[i]) {avgByDay["days"] += this.freeTime[i];}
+    }
+    avgByDay["workdays"] /= 7;
+    avgByDay["days"] /= 7;
+    return avgByDay;
+  }
+
+  numDays() {
+    var numDays = {"workdays": 0, "days": 0};
+    for (var i = 0; i < 7; i++) {
+      if (this.work[i]) { numDays["workdays"]++; }
+      if (this.work[i]) { numDays["days"]++; }
+    }
+    return numDays;
   }
 
   sleepDeviation() {
     var mean = 0;
-    this.bedtime.forEach((day, i) => {
+    this.bedtime.forEach((i) => {
       mean += this.bedtime[i];
     });
     mean /= 7;
 
     var sd = 0;
-    this.bedtime.forEach((day, i) => {
+    this.bedtime.forEach((i) => {
       sd += Math.pow((this.bedtime[i] - mean), 2);
     });
 
@@ -131,8 +161,8 @@ class Schedule {
 
   interaction() {
 
-    this.scheduleData.forEach((day, i) => {
-      day.forEach((hour, i) => {
+    this.scheduleData.forEach((day) => {
+      day.forEach((hour) => {
         if (hour == "interaction") {
           return true;}
       });
@@ -142,6 +172,11 @@ class Schedule {
 
 
   calcIdealness() {
+    mind = 100;
+    body = 100;
+    soul = 100;
+
+
     for (var i = 0; i < this.sleep.length; i++) {
       if (this.sleep[i] < this.idealSleep[0] || this.sleep[i] > this.idealSleep[1]) {
         var low = Math.abs(this.sleep[i] - this.idealSleep[0]);
@@ -156,7 +191,6 @@ class Schedule {
           body -= high;
         }
     }}
-
 
     var timeDiff;
     for (var i = 0; i < 7; i++) {
@@ -199,6 +233,7 @@ class Schedule {
   //add at least one hour interaction
 
   //calc idealness after change, then add mind body soul, then calc again
+
   change() {
     var mean = 0;
     this.bedtime.forEach((i) => {
@@ -222,10 +257,16 @@ class Schedule {
         this.wakeup[i] = this.bedtime[i] - (24 - this.sleep);
       });
 
+    var avgFree = this.averageFreeTime();
+    var numWorkdays = this.numDays();
+    //go through number of days and spread out the free time based on average amount of time availible and ideal :)
 
 
 
-  }
+
+
+
+   }
 
   //for lowest score implement morse of those activities
 //fix problems first
@@ -257,6 +298,9 @@ class Schedule {
 }
 
 //current user schedule
-var mySchedule = new Schedule(currentSchedule, 18, true, 0, "Hi", "bye", false);
+var mySchedule = new Schedule(currentSchedule, toDo, obligations, 18, true, 0, "Hi", "bye");
+mySchedule.calcIdealness();
+console.log(mind + " " + body + " " + soul);
+mySchedule.change();
 mySchedule.calcIdealness();
 console.log(mind + " " + body + " " + soul);
