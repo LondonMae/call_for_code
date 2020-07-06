@@ -129,18 +129,14 @@ class Schedule {
       if (this.work[i]) {avgByDay["workdays"] += this.freeTime[i];}
       if (!this.work[i]) {avgByDay["days"] += this.freeTime[i];}
     }
-    avgByDay["workdays"] /= 7;
-    avgByDay["days"] /= 7;
-    return avgByDay;
-  }
-
-  numDays() {
     var numDays = {"workdays": 0, "days": 0};
     for (var i = 0; i < 7; i++) {
       if (this.work[i]) { numDays["workdays"]++; }
       if (this.work[i]) { numDays["days"]++; }
     }
-    return numDays;
+    avgByDay["workdays"] /= numDays["workdays"];
+    avgByDay["days"] /= numDays["days"];
+    return avgByDay;
   }
 
   sleepDeviation() {
@@ -258,8 +254,23 @@ class Schedule {
       });
 
     var avgFree = this.averageFreeTime();
-    var numWorkdays = this.numDays();
     //go through number of days and spread out the free time based on average amount of time availible and ideal :)
+    //go through all days, if workday and less, find max avail time,
+    //if freedays have a lot more, move toDos to freedays after origional movement
+
+    this.scheduleData.forEach((day, i) => {
+      if (this.work[i] && this.freeTime[i] < avgFree["workday"]) {
+        day.forEach((hour, i) => {
+          var hours = new Array();
+          if (!Object.keys(this.obligations).includes(i) &&) {
+            hours.push(Math.random()*10);
+          }
+        });
+       }
+    });
+
+    //exercise
+    //iteraction
 
 
 
