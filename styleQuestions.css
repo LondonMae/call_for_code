@@ -138,9 +138,9 @@ ul{
   padding: 0px;
   margin-left: 20px;
 }
-#text{
+.text{
   visibility: visible;
 }
 .option{
-  display: none;
+  visibility: hidden;
 }

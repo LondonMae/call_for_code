@@ -16,7 +16,12 @@ function showMask1() { //connected with the "next" button on dropdown question
 }
 
 function changeSelect() {
-  if(document.getElementById("text").style.visibility == "visible") {
-    document.getElementById("text").style.visibility = "hidden";
-  }
+  var x = document.getElementsByTagName('DIV')
+  for(var i = 0; i < x.length; i++){
+    if (x[i].className == 'option' || x[i].style.visibility == 'hidden')
+        x[i].style.visibility = 'visible';
+    else if(x[i].className == 'text' || x[i].style.visibility == 'visible')
+      x[i].style.visibility = 'hidden';
+   }
+
 }
